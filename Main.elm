@@ -1,7 +1,6 @@
 module Main (..) where
 
-import Media
-import Media.Model exposing (..)
+import Media exposing (..)
 import Media.Site as Site
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -42,7 +41,7 @@ type Action
   | ChangeText String
 
 
-kindToString : MediaKind -> String
+kindToString : Kind -> String
 kindToString kind =
   case kind of
     Post ->
