@@ -16,21 +16,55 @@ type alias Model =
 
 emptyModel : Model
 emptyModel =
-  """Imgur:
-https://imgur.com/cjCGCNH
+  """elm-media is a small Elm library for extracting social media URLs from text.
+
+Some examples:
+
+Imgur:
+
+  https://imgur.com/cjCGCNH
 
 YouTube:
-https://www.youtube.com/watch?v=oYk8CKH7OhE
-https://www.youtube.com/watch?v=DfLvDFxcAIA
+
+  https://youtu.be/oYk8CKH7OhE
+  https://www.youtube.com/watch?v=DfLvDFxcAIA
 
 Other supported sites:
-Gfycat, Twitch, Livecap, Oddshot
+
+  Gfycat, Twitch, Livecap, Oddshot (more coming soon)
+
+Pull-requests welcome!
 """
 
 
 type Action
   = NoOp
   | ChangeText String
+
+
+kindToString : MediaKind -> String
+kindToString kind =
+  case kind of
+    Post ->
+      "Post"
+
+    Reply ->
+      "Reply"
+
+    Stream ->
+      "Stream"
+
+    Video ->
+      "Video"
+
+    Image ->
+      "Image"
+
+    Album ->
+      "Album"
+
+    Listing ->
+      "Listing"
 
 
 update : Action -> Model -> Model
@@ -68,6 +102,9 @@ toHtml urls =
     if not (String.isEmpty iframeUrl) then
       iframe
         [ src iframeUrl
+        , class "media-iframe"
+        , width 560
+        , height 315
         , attribute "frameborder" "0"
         , attribute "allowfullscreen" "true"
         ]
@@ -75,11 +112,12 @@ toHtml urls =
     else if not (String.isEmpty imgUrl) then
       img
         [ src imgUrl
+        , class "media-image"
         ]
         []
     else
       div
-        []
+        [ class "media-none" ]
         [ text "no image url"
         , text urls.media.id
         , text urls.media.siteId
@@ -91,66 +129,53 @@ view address model =
   let
     input =
       div
-        [ (style
-            [ ( "flex", "1" )
-            , ( "padding", "10px" )
-            ]
-          )
-        ]
-        [ h2
-            []
-            [ text "Input" ]
-        , textarea
-            [ (style
-                [ ( "flex", "1" )
-                , ( "padding", "10px" )
-                ]
-              )
-            , on "input" targetValue (Signal.message address << ChangeText)
+        [ class "input" ]
+        [ textarea
+            [ on "input" targetValue (Signal.message address << ChangeText)
+            , autofocus True
             ]
             [ text model ]
         ]
 
     mediaView ( site, media, urls, html ) =
       div
-        []
-        [ p
+        [ class "media" ]
+        [ ul
             []
-            [ ul
+            [ li
                 []
-                [ li
+                [ strong
                     []
-                    [ strong
-                        []
-                        [ text "Site: " ]
-                    , span
-                        []
-                        [ text site.name ]
-                    ]
-                , li
+                    [ text "Site: " ]
+                , span
                     []
-                    [ strong
-                        []
-                        [ text "Media ID: " ]
-                    , span
-                        []
-                        [ text media.id ]
-                    ]
-                , li
-                    []
-                    [ strong
-                        []
-                        [ text "URL: " ]
-                    , span
-                        []
-                        [ a
-                            [ urls.url |> Maybe.withDefault "" |> href ]
-                            [ urls.url |> Maybe.withDefault "" |> text ]
-                        ]
-                    ]
+                    [ text site.name ]
                 ]
-            , html
-            , hr [] []
+            , li
+                []
+                [ strong
+                    []
+                    [ text "ID: " ]
+                , span
+                    []
+                    [ text media.id ]
+                ]
+            , li
+                []
+                [ strong
+                    []
+                    [ text "Kind: " ]
+                , span
+                    []
+                    [ media.kind |> kindToString |> text ]
+                ]
+            ]
+        , div
+            [ class "media-embed" ]
+            [ html
+            , a
+                [ urls.url |> Maybe.withDefault "" |> href ]
+                [ urls.url |> Maybe.withDefault "" |> text ]
             ]
         ]
 
@@ -163,35 +188,29 @@ view address model =
 
     output =
       div
-        [ (style
-            [ ( "flex", "1" )
-            , ( "padding", "10px" )
-            ]
-          )
+        [ class "output" ]
+        [ div
+            [ class "media-list" ]
+            media
         ]
-        (List.concat
-          [ [ h2
-                []
-                [ text ("Output (matches: " ++ (toString (List.length media)) ++ ")") ]
-            ]
-          , media
-          ]
-        )
   in
     div
-      [ style
-          [ ( "display", "flex" )
-          , ( "flex-direction", "column" )
-          , ( "padding", "10px" )
-          ]
-      ]
-      [ h1 [] [ text "elm-media" ]
-      , div
-          [ style
-              [ ( "flex", "1" )
-              , ( "display", "flex" )
+      [ class "container" ]
+      [ header
+          []
+          [ h1 [] [ text "elm-media" ]
+          , nav
+              []
+              [ a
+                  [ href "http://package.elm-lang.org/packages/liamcurry/elm-media/" ]
+                  [ text "Documentation" ]
+              , a
+                  [ href "https://github.com/liamcurry/elm-media" ]
+                  [ text "Github" ]
               ]
           ]
+      , div
+          [ class "input-output" ]
           [ input
           , output
           ]
