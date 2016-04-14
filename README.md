@@ -1,12 +1,12 @@
 elm-media
 ---------
 
+[Demo](http://liamcurry.com/elm-media/) |
+[Docs](http://package.elm-lang.org/packages/liamcurry/elm-media/)
+
 `elm-media` is a small Elm library for extracting social media URLs from text.
 The typical use-case for this library is to embed videos and images from around
 the web into webpages.
-
-[Documentation](http://package.elm-lang.org/packages/liamcurry/elm-media/)
-[Demo](http://liamcurry.com/elm-media/)
 
 ## Example
 
