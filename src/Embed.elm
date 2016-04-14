@@ -1,161 +1,101 @@
-module Embed (..) where
+module Embed (find, urls, html) where
 
-import Embed.Common exposing (..)
-import Embed.Gfycat as Gfycat
-import Embed.Imgur as Imgur
-import Embed.Livecap as Livecap
-import Embed.Oddshot as Oddshot
-import Embed.Twitch as Twitch
-import Embed.YouTube as YouTube
 import Html exposing (..)
-import Html.Attributes exposing (..)
-import Json.Encode exposing (string)
+import Html.Attributes exposing (src, attribute)
 import Regex exposing (Regex, Match, regex)
+import String
+import Embed.Model exposing (..)
 
 
-mediaIdFromMatch : Match -> Maybe MediaId
-mediaIdFromMatch match =
+{-| A library for finding and embedding social media links.
+
+# Finding media
+@docs find
+
+# Building URLs
+@docs urls
+
+# Embedding media
+@docs html
+
+-}
+justValues : List (Maybe a) -> List a
+justValues list =
   let
-    sub =
-      List.head match.submatches
+    buildResults maybe result =
+      case maybe of
+        Just value ->
+          value :: result
+
+        Nothing ->
+          result
   in
-    case sub of
-      Just maybeMediaId ->
-        maybeMediaId
-
-      Nothing ->
-        Nothing
+    List.foldr buildResults [] list
 
 
-buildMatchRefs : Maybe MediaId -> List MediaId -> List MediaId
-buildMatchRefs maybeMediaId result =
-  case maybeMediaId of
-    Just mediaId ->
-      mediaId :: result
-
-    Nothing ->
-      result
-
-
-match : String -> SiteId -> ( Kind, Regex ) -> List Media
-match input siteId ( kind, re ) =
+match : String -> Site -> ( MediaKind, Regex ) -> List ( Site, Media )
+match input site ( kind, re ) =
   input
     |> Regex.find Regex.All re
-    |> List.map mediaIdFromMatch
-    |> List.foldl buildMatchRefs []
-    |> List.map (\mediaId -> { siteId = siteId, kind = kind, id = mediaId })
+    |> List.map (\match -> List.head match.submatches)
+    |> justValues
+    |> justValues
+    |> List.map (\mediaId -> ( site, { siteId = site.id, kind = kind, id = mediaId } ))
 
 
-defaultSites : List Site
-defaultSites =
-  [ Gfycat.site
-  , Imgur.site
-  , Livecap.site
-  , Oddshot.site
-  , Twitch.site
-  , YouTube.site
-  ]
-
-
-find : String -> List Media
-find input =
-  findWithSites input defaultSites
-
-
-findWithSites : String -> List Site -> List Media
-findWithSites input sites =
-  sites
-    |> List.map (findWithSite input)
-    |> List.concat
-
-
-findWithSite : String -> Site -> List Media
-findWithSite input site =
-  site.matchers
-    |> List.map (match input site.id)
-    |> List.concat
-
-
-withoutNothing : Maybe a -> List a -> List a
-withoutNothing maybe result =
-  case maybe of
-    Just thing ->
-      thing :: result
-
-    Nothing ->
-      result
-
-
-html : List Media -> List Html
-html media =
-  media
-    |> List.map ((flip htmlWithSites) defaultSites)
-    |> List.foldl withoutNothing []
-
-
-htmlWithSites : Media -> List Site -> Maybe Html
-htmlWithSites media sites =
-  sites
-    |> List.filter (\site -> site.id == media.siteId)
-    |> List.map (htmlWithSite media)
-    |> Maybe.oneOf
-
-
-htmlWithSite : Media -> Site -> Maybe Html
-htmlWithSite media site =
+find : List Site -> String -> List ( Site, Media )
+find sites input =
   let
-    maybeIframeUrl =
-      case site.iframeUrl of
-        Just iframeUrl ->
-          iframeUrl media
-
-        Nothing ->
-          Nothing
-
-    maybeImgUrlFn =
-      Maybe.oneOf
-        [ site.imgLgUrl
-        , site.imgMdUrl
-        , site.imgSmUrl
-        ]
-
-    maybeImgUrl =
-      case maybeImgUrlFn of
-        Just imgUrlFn ->
-          imgUrlFn media
-
-        Nothing ->
-          Nothing
+    matches site =
+      site.matchers
+        |> List.map (match input site)
+        |> List.concat
   in
-    if site.id /= media.siteId then
-      Nothing
+    sites
+      |> List.map matches
+      |> List.concat
+
+
+urls : List ( Site, Media ) -> List Urls
+urls results =
+  results
+    |> List.map (\( site, media ) -> toUrls site media)
+
+
+html : List Urls -> List Html
+html urls =
+  List.map toHtml urls
+
+
+toHtml : Urls -> Html
+toHtml urls =
+  let
+    imgUrl =
+      [ urls.imgSmUrl
+      , urls.imgMdUrl
+      , urls.imgLgUrl
+      ]
+        |> Maybe.oneOf
+        |> Maybe.withDefault ""
+
+    iframeUrl =
+      Maybe.withDefault "" urls.iframeUrl
+  in
+    if not (String.isEmpty iframeUrl) then
+      iframe
+        [ src iframeUrl
+        , attribute "frameborder" "0"
+        , attribute "allowfullscreen" "true"
+        ]
+        []
+    else if not (String.isEmpty imgUrl) then
+      img
+        [ src imgUrl ]
+        []
     else
-      case maybeIframeUrl of
-        Just url ->
-          Just
-            (iframe
-              [ src url
-              , attribute "frameborder" "0"
-              , attribute "allowfullscreen" "true"
-              ]
-              []
-            )
-
-        Nothing ->
-          case maybeImgUrl of
-            Just imgUrl ->
-              Just
-                (img
-                  [ src imgUrl ]
-                  []
-                )
-
-            Nothing ->
-              Just
-                (div
-                  []
-                  [ text "no image url"
-                  , text media.id
-                  , text media.siteId
-                  ]
-                )
+      div
+        []
+        [ text "no image url"
+        , text urls.media.id
+        , text urls.media.siteId
+        ]
