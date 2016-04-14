@@ -1,11 +1,13 @@
 module Main (..) where
 
-import Embed
-import Embed.Site as Site
+import Media
+import Media.Model exposing (..)
+import Media.Site as Site
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import StartApp.Simple as StartApp
+import String
 
 
 type alias Model =
@@ -14,9 +16,16 @@ type alias Model =
 
 emptyModel : Model
 emptyModel =
-  """https://imgur.com/cjCGCNH
-https://www.youtube.com/watch?v=oYk8CKH7Ohj
-https://www.youtube.com/watch?v=DfLvDFxcAIA"""
+  """Imgur:
+https://imgur.com/cjCGCNH
+
+YouTube:
+https://www.youtube.com/watch?v=oYk8CKH7OhE
+https://www.youtube.com/watch?v=DfLvDFxcAIA
+
+Other supported sites:
+Gfycat, Twitch, Livecap, Oddshot
+"""
 
 
 type Action
@@ -32,6 +41,49 @@ update action model =
 
     ChangeText text ->
       text
+
+
+{-| Create HTML for media.
+-}
+html : List ( Site, Media, Urls ) -> List ( Site, Media, Urls, Html )
+html results =
+  results
+    |> List.map (\( site, media, urls ) -> ( site, media, urls, toHtml urls ))
+
+
+toHtml : Urls -> Html
+toHtml urls =
+  let
+    imgUrl =
+      [ urls.imgSmUrl
+      , urls.imgMdUrl
+      , urls.imgLgUrl
+      ]
+        |> Maybe.oneOf
+        |> Maybe.withDefault ""
+
+    iframeUrl =
+      Maybe.withDefault "" urls.iframeUrl
+  in
+    if not (String.isEmpty iframeUrl) then
+      iframe
+        [ src iframeUrl
+        , attribute "frameborder" "0"
+        , attribute "allowfullscreen" "true"
+        ]
+        []
+    else if not (String.isEmpty imgUrl) then
+      img
+        [ src imgUrl
+        ]
+        []
+    else
+      div
+        []
+        [ text "no image url"
+        , text urls.media.id
+        , text urls.media.siteId
+        ]
 
 
 view : Signal.Address Action -> Model -> Html
@@ -59,11 +111,55 @@ view address model =
             [ text model ]
         ]
 
+    mediaView ( site, media, urls, html ) =
+      div
+        []
+        [ p
+            []
+            [ ul
+                []
+                [ li
+                    []
+                    [ strong
+                        []
+                        [ text "Site: " ]
+                    , span
+                        []
+                        [ text site.name ]
+                    ]
+                , li
+                    []
+                    [ strong
+                        []
+                        [ text "Media ID: " ]
+                    , span
+                        []
+                        [ text media.id ]
+                    ]
+                , li
+                    []
+                    [ strong
+                        []
+                        [ text "URL: " ]
+                    , span
+                        []
+                        [ a
+                            [ urls.url |> Maybe.withDefault "" |> href ]
+                            [ urls.url |> Maybe.withDefault "" |> text ]
+                        ]
+                    ]
+                ]
+            , html
+            , hr [] []
+            ]
+        ]
+
     media =
       model
-        |> Embed.find Site.all
-        |> Embed.urls
-        |> Embed.html
+        |> Media.find Site.all
+        |> Media.urls
+        |> html
+        |> List.map mediaView
 
     output =
       div
@@ -89,7 +185,7 @@ view address model =
           , ( "padding", "10px" )
           ]
       ]
-      [ h1 [] [ text "elm-embed" ]
+      [ h1 [] [ text "elm-media" ]
       , div
           [ style
               [ ( "flex", "1" )

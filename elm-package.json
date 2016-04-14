@@ -1,12 +1,14 @@
 {
     "version": "1.0.0",
     "summary": "helpful summary of your project, less than 80 characters",
-    "repository": "https://github.com/liamcurry/elm-embed.git",
+    "repository": "https://github.com/liamcurry/elm-media.git",
     "license": "BSD3",
     "source-directories": [
-        "src/elm"
+        "src"
     ],
-    "exposed-modules": [],
+    "exposed-modules": [
+      "Media"
+    ],
     "dependencies": {
         "elm-lang/core": "3.0.0 <= v < 4.0.0"
     },

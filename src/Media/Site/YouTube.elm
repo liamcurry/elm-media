@@ -1,6 +1,6 @@
-module Embed.Site.YouTube (id, site, matchers) where
+module Media.Site.YouTube (id, site, matchers) where
 
-import Embed.Model exposing (..)
+import Media.Model exposing (..)
 import Regex exposing (Regex, regex)
 
 

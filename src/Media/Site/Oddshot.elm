@@ -1,6 +1,6 @@
-module Embed.Site.Oddshot (id, site) where
+module Media.Site.Oddshot (id, site) where
 
-import Embed.Model exposing (..)
+import Media.Model exposing (..)
 import Regex exposing (regex)
 
 

@@ -1,4 +1,4 @@
-module Embed.Model (MediaKind(..), MediaId, Media, Url, Urls, SiteId, Site, toUrls) where
+module Media.Model (MediaKind(..), MediaId, Media, Url, Urls, SiteId, Site, toUrls) where
 
 import Regex exposing (Regex)
 

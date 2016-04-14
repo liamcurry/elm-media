@@ -1,6 +1,6 @@
-module Embed.Site.Gfycat (id, site, matchers) where
+module Media.Site.Gfycat (id, site, matchers) where
 
-import Embed.Model exposing (..)
+import Media.Model exposing (..)
 import Regex exposing (Regex, regex)
 
 
