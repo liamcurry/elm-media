@@ -1,6 +1,7 @@
 module Main (..) where
 
 import Embed
+import Embed.Site as Site
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -59,7 +60,10 @@ view address model =
         ]
 
     media =
-      Embed.find model
+      model
+        |> Embed.find Site.all
+        |> Embed.urls
+        |> Embed.html
 
     output =
       div
@@ -74,7 +78,7 @@ view address model =
                 []
                 [ text ("Output (matches: " ++ (toString (List.length media)) ++ ")") ]
             ]
-          , Embed.html media
+          , media
           ]
         )
   in
