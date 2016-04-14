@@ -5,7 +5,7 @@ elm-media
 The typical use-case for this library is to embed videos and images from around
 the web into webpages.
 
-[Demo](http://liamcurry.com/elm-media/)
+[Documentation](http://package.elm-lang.org/packages/liamcurry/elm-media/) | [Demo](http://liamcurry.com/elm-media/)
 
 ## Example
 
