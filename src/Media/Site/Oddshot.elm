@@ -1,7 +1,6 @@
 module Media.Site.Oddshot (id, site) where
 
-import Media.Model exposing (..)
-import Regex exposing (regex)
+import Media exposing (Kind(..), Media, Url, SiteId, Site)
 
 
 id : SiteId
@@ -34,7 +33,7 @@ site =
   { id = id
   , name = "Oddshot"
   , matchers =
-      [ ( Video, regex "" )
+      [ ( Video, "" )
       ]
   , url = url
   , imgSmUrl = Nothing

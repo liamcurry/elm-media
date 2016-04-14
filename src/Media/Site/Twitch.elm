@@ -1,7 +1,6 @@
-module Media.Site.Twitch (id, site, matchers) where
+module Media.Site.Twitch (id, site) where
 
-import Media.Model exposing (..)
-import Regex exposing (Regex, regex)
+import Media exposing (Kind(..), Media, Url, SiteId, Site)
 
 
 id : SiteId
@@ -50,13 +49,13 @@ iframeUrl media =
       Nothing
 
 
-matchers : List ( MediaKind, Regex )
+matchers : List ( Kind, String )
 matchers =
-  [ ( Stream, regex "(?:twitch.tv\\/)([\\w_]+)" )
-  , ( Stream, regex "(?:livecap.tv\\/t\\/)([\\w_]+)" )
-  , ( Stream, regex "(?:oddshot.tv\\/shot\\/)([\\w_]+)" )
+  [ ( Stream, "(?:twitch.tv\\/)([\\w_]+)" )
+  , ( Stream, "(?:livecap.tv\\/t\\/)([\\w_]+)" )
+  , ( Stream, "(?:oddshot.tv\\/shot\\/)([\\w_]+)" )
     -- TODO: saving links to specific times
-  , ( Video, regex "(?:twitch.tv\\/[\\w_]+\\/v\\/)(\\d+)" )
+  , ( Video, "(?:twitch.tv\\/[\\w_]+\\/v\\/)(\\d+)" )
   ]
 
 

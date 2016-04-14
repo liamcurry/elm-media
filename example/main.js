@@ -10479,12 +10479,10 @@ Elm.StartApp.Simple.make = function (_elm) {
    return _elm.StartApp.Simple.values = {_op: _op,Config: Config,start: start};
 };
 Elm.Media = Elm.Media || {};
-Elm.Media.Model = Elm.Media.Model || {};
-Elm.Media.Model.make = function (_elm) {
+Elm.Media.make = function (_elm) {
    "use strict";
    _elm.Media = _elm.Media || {};
-   _elm.Media.Model = _elm.Media.Model || {};
-   if (_elm.Media.Model.values) return _elm.Media.Model.values;
+   if (_elm.Media.values) return _elm.Media.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
@@ -10494,6 +10492,29 @@ Elm.Media.Model.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var justValues = function (list) {
+      var buildResults = F2(function (maybe,result) {
+         var _p0 = maybe;
+         if (_p0.ctor === "Just") {
+               return A2($List._op["::"],_p0._0,result);
+            } else {
+               return result;
+            }
+      });
+      return A3($List.foldr,buildResults,_U.list([]),list);
+   };
+   var match = F3(function (input,site,_p1) {
+      var _p2 = _p1;
+      return A2($List.map,
+      function (mediaId) {
+         return {ctor: "_Tuple2",_0: site,_1: {siteId: site.id,kind: _p2._0,id: mediaId}};
+      },
+      justValues(justValues(A2($List.map,function (match) {    return $List.head(match.submatches);},A3($Regex.find,$Regex.All,$Regex.regex(_p2._1),input)))));
+   });
+   var find = F2(function (sites,input) {
+      var matches = function (site) {    return $List.concat(A2($List.map,A2(match,input,site),site.matchers));};
+      return $List.concat(A2($List.map,matches,sites));
+   });
    var toUrls = F2(function (site,media) {
       var url = function (fn) {    return fn(media);};
       return {media: media
@@ -10503,6 +10524,16 @@ Elm.Media.Model.make = function (_elm) {
              ,imgLgUrl: A2($Maybe.andThen,site.imgLgUrl,url)
              ,iframeUrl: A2($Maybe.andThen,site.iframeUrl,url)};
    });
+   var urls = function (results) {
+      return A2($List.map,
+      function (_p3) {
+         var _p4 = _p3;
+         var _p6 = _p4._0;
+         var _p5 = _p4._1;
+         return {ctor: "_Tuple3",_0: _p6,_1: _p5,_2: A2(toUrls,_p6,_p5)};
+      },
+      results);
+   };
    var Urls = F6(function (a,b,c,d,e,f) {    return {media: a,url: b,imgSmUrl: c,imgMdUrl: d,imgLgUrl: e,iframeUrl: f};});
    var Site = F8(function (a,b,c,d,e,f,g,h) {    return {id: a,name: b,matchers: c,url: d,imgSmUrl: e,imgMdUrl: f,imgLgUrl: g,iframeUrl: h};});
    var Media = F3(function (a,b,c) {    return {id: a,kind: b,siteId: c};});
@@ -10513,68 +10544,20 @@ Elm.Media.Model.make = function (_elm) {
    var Stream = {ctor: "Stream"};
    var Reply = {ctor: "Reply"};
    var Post = {ctor: "Post"};
-   return _elm.Media.Model.values = {_op: _op
-                                    ,toUrls: toUrls
-                                    ,Media: Media
-                                    ,Urls: Urls
-                                    ,Site: Site
-                                    ,Post: Post
-                                    ,Reply: Reply
-                                    ,Stream: Stream
-                                    ,Video: Video
-                                    ,Image: Image
-                                    ,Album: Album
-                                    ,Listing: Listing};
-};
-Elm.Media = Elm.Media || {};
-Elm.Media.make = function (_elm) {
-   "use strict";
-   _elm.Media = _elm.Media || {};
-   if (_elm.Media.values) return _elm.Media.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
-   $Regex = Elm.Regex.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var urls = function (results) {
-      return A2($List.map,
-      function (_p0) {
-         var _p1 = _p0;
-         var _p3 = _p1._0;
-         var _p2 = _p1._1;
-         return {ctor: "_Tuple3",_0: _p3,_1: _p2,_2: A2($Media$Model.toUrls,_p3,_p2)};
-      },
-      results);
-   };
-   var justValues = function (list) {
-      var buildResults = F2(function (maybe,result) {
-         var _p4 = maybe;
-         if (_p4.ctor === "Just") {
-               return A2($List._op["::"],_p4._0,result);
-            } else {
-               return result;
-            }
-      });
-      return A3($List.foldr,buildResults,_U.list([]),list);
-   };
-   var match = F3(function (input,site,_p5) {
-      var _p6 = _p5;
-      return A2($List.map,
-      function (mediaId) {
-         return {ctor: "_Tuple2",_0: site,_1: {siteId: site.id,kind: _p6._0,id: mediaId}};
-      },
-      justValues(justValues(A2($List.map,function (match) {    return $List.head(match.submatches);},A3($Regex.find,$Regex.All,_p6._1,input)))));
-   });
-   var find = F2(function (sites,input) {
-      var matches = function (site) {    return $List.concat(A2($List.map,A2(match,input,site),site.matchers));};
-      return $List.concat(A2($List.map,matches,sites));
-   });
-   return _elm.Media.values = {_op: _op,find: find,urls: urls};
+   return _elm.Media.values = {_op: _op
+                              ,toUrls: toUrls
+                              ,find: find
+                              ,urls: urls
+                              ,Media: Media
+                              ,Site: Site
+                              ,Urls: Urls
+                              ,Post: Post
+                              ,Reply: Reply
+                              ,Stream: Stream
+                              ,Video: Video
+                              ,Image: Image
+                              ,Album: Album
+                              ,Listing: Listing};
 };
 Elm.Media = Elm.Media || {};
 Elm.Media.Site = Elm.Media.Site || {};
@@ -10590,12 +10573,11 @@ Elm.Media.Site.Gfycat.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
-   $Regex = Elm.Regex.make(_elm),
+   $Media = Elm.Media.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var matchers = _U.list([{ctor: "_Tuple2",_0: $Media$Model.Image,_1: $Regex.regex("(?:gfycat.com\\/)(\\w+)")}]);
+   var matchers = _U.list([{ctor: "_Tuple2",_0: $Media.Image,_1: "(?:gfycat.com\\/)(\\w+)"}]);
    var url = function (media) {
       var _p0 = media.kind;
       if (_p0.ctor === "Image") {
@@ -10623,7 +10605,7 @@ Elm.Media.Site.Gfycat.make = function (_elm) {
               ,imgMdUrl: $Maybe.Just(imgUrl("fat"))
               ,imgLgUrl: $Maybe.Just(imgUrl("giant"))
               ,iframeUrl: $Maybe.Just(imgUrl("fat"))};
-   return _elm.Media.Site.Gfycat.values = {_op: _op,id: id,site: site,matchers: matchers};
+   return _elm.Media.Site.Gfycat.values = {_op: _op,id: id,site: site};
 };
 Elm.Media = Elm.Media || {};
 Elm.Media.Site = Elm.Media.Site || {};
@@ -10639,13 +10621,12 @@ Elm.Media.Site.Imgur.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
-   $Regex = Elm.Regex.make(_elm),
+   $Media = Elm.Media.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var matchers = _U.list([{ctor: "_Tuple2",_0: $Media$Model.Image,_1: $Regex.regex("imgur.com/(?!gallery\\/|a\\/)(\\w+)")}
-                          ,{ctor: "_Tuple2",_0: $Media$Model.Album,_1: $Regex.regex("imgur.com/(?:gallery\\/|a\\/)(\\w+)")}]);
+   var matchers = _U.list([{ctor: "_Tuple2",_0: $Media.Image,_1: "imgur.com/(?!gallery\\/|a\\/)(\\w+)"}
+                          ,{ctor: "_Tuple2",_0: $Media.Album,_1: "imgur.com/(?:gallery\\/|a\\/)(\\w+)"}]);
    var url = function (media) {
       var _p0 = media.kind;
       switch (_p0.ctor)
@@ -10672,7 +10653,7 @@ Elm.Media.Site.Imgur.make = function (_elm) {
               ,imgMdUrl: $Maybe.Just(imgMdUrl)
               ,imgLgUrl: $Maybe.Just(imgLgUrl)
               ,iframeUrl: $Maybe.Nothing};
-   return _elm.Media.Site.Imgur.values = {_op: _op,id: id,site: site,matchers: matchers};
+   return _elm.Media.Site.Imgur.values = {_op: _op,id: id,site: site};
 };
 Elm.Media = Elm.Media || {};
 Elm.Media.Site = Elm.Media.Site || {};
@@ -10688,12 +10669,11 @@ Elm.Media.Site.Livecap.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
-   $Regex = Elm.Regex.make(_elm),
+   $Media = Elm.Media.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var matchers = _U.list([{ctor: "_Tuple2",_0: $Media$Model.Video,_1: $Regex.regex("livecap.tv\\/t\\/([\\w_-]+\\/[\\w_-]+)")}]);
+   var matchers = _U.list([{ctor: "_Tuple2",_0: $Media.Video,_1: "livecap.tv\\/t\\/([\\w_-]+\\/[\\w_-]+)"}]);
    var iframeUrl = function (media) {
       var _p0 = media.kind;
       if (_p0.ctor === "Video") {
@@ -10719,7 +10699,7 @@ Elm.Media.Site.Livecap.make = function (_elm) {
               ,imgMdUrl: $Maybe.Nothing
               ,imgLgUrl: $Maybe.Nothing
               ,iframeUrl: $Maybe.Just(iframeUrl)};
-   return _elm.Media.Site.Livecap.values = {_op: _op,id: id,site: site,matchers: matchers};
+   return _elm.Media.Site.Livecap.values = {_op: _op,id: id,site: site};
 };
 Elm.Media = Elm.Media || {};
 Elm.Media.Site = Elm.Media.Site || {};
@@ -10735,8 +10715,7 @@ Elm.Media.Site.Oddshot.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
-   $Regex = Elm.Regex.make(_elm),
+   $Media = Elm.Media.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
@@ -10759,7 +10738,7 @@ Elm.Media.Site.Oddshot.make = function (_elm) {
    var id = "oddshot";
    var site = {id: id
               ,name: "Oddshot"
-              ,matchers: _U.list([{ctor: "_Tuple2",_0: $Media$Model.Video,_1: $Regex.regex("")}])
+              ,matchers: _U.list([{ctor: "_Tuple2",_0: $Media.Video,_1: ""}])
               ,url: url
               ,imgSmUrl: $Maybe.Nothing
               ,imgMdUrl: $Maybe.Nothing
@@ -10781,15 +10760,14 @@ Elm.Media.Site.Twitch.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
-   $Regex = Elm.Regex.make(_elm),
+   $Media = Elm.Media.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var matchers = _U.list([{ctor: "_Tuple2",_0: $Media$Model.Stream,_1: $Regex.regex("(?:twitch.tv\\/)([\\w_]+)")}
-                          ,{ctor: "_Tuple2",_0: $Media$Model.Stream,_1: $Regex.regex("(?:livecap.tv\\/t\\/)([\\w_]+)")}
-                          ,{ctor: "_Tuple2",_0: $Media$Model.Stream,_1: $Regex.regex("(?:oddshot.tv\\/shot\\/)([\\w_]+)")}
-                          ,{ctor: "_Tuple2",_0: $Media$Model.Video,_1: $Regex.regex("(?:twitch.tv\\/[\\w_]+\\/v\\/)(\\d+)")}]);
+   var matchers = _U.list([{ctor: "_Tuple2",_0: $Media.Stream,_1: "(?:twitch.tv\\/)([\\w_]+)"}
+                          ,{ctor: "_Tuple2",_0: $Media.Stream,_1: "(?:livecap.tv\\/t\\/)([\\w_]+)"}
+                          ,{ctor: "_Tuple2",_0: $Media.Stream,_1: "(?:oddshot.tv\\/shot\\/)([\\w_]+)"}
+                          ,{ctor: "_Tuple2",_0: $Media.Video,_1: "(?:twitch.tv\\/[\\w_]+\\/v\\/)(\\d+)"}]);
    var iframeUrl = function (media) {
       var _p0 = media.kind;
       switch (_p0.ctor)
@@ -10822,7 +10800,7 @@ Elm.Media.Site.Twitch.make = function (_elm) {
               ,imgMdUrl: $Maybe.Just(imgUrl("320x180"))
               ,imgLgUrl: $Maybe.Just(imgUrl("640x360"))
               ,iframeUrl: $Maybe.Just(iframeUrl)};
-   return _elm.Media.Site.Twitch.values = {_op: _op,id: id,site: site,matchers: matchers};
+   return _elm.Media.Site.Twitch.values = {_op: _op,id: id,site: site};
 };
 Elm.Media = Elm.Media || {};
 Elm.Media.Site = Elm.Media.Site || {};
@@ -10838,14 +10816,13 @@ Elm.Media.Site.YouTube.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
-   $Regex = Elm.Regex.make(_elm),
+   $Media = Elm.Media.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var matchers = _U.list([{ctor: "_Tuple2"
-                           ,_0: $Media$Model.Video
-                           ,_1: $Regex.regex("(?:youtu\\.be\\/|youtube(?:-nocookie)?\\.com\\S*[^\\w\\s-])([\\w-]{11})(?=[^\\w-]|$)(?![?=&+%\\w.-]*(?:[\'\"][^<>]*>|<\\/a>))[?=&+%\\w.-]*")}]);
+                           ,_0: $Media.Video
+                           ,_1: "(?:youtu\\.be\\/|youtube(?:-nocookie)?\\.com\\S*[^\\w\\s-])([\\w-]{11})(?=[^\\w-]|$)(?![?=&+%\\w.-]*(?:[\'\"][^<>]*>|<\\/a>))[?=&+%\\w.-]*"}]);
    var iframeUrl = function (media) {
       var _p0 = media.kind;
       if (_p0.ctor === "Video") {
@@ -10881,7 +10858,7 @@ Elm.Media.Site.YouTube.make = function (_elm) {
               ,imgMdUrl: $Maybe.Just(imgUrl("mqdefault"))
               ,imgLgUrl: $Maybe.Just(imgUrl("hqdefault"))
               ,iframeUrl: $Maybe.Just(iframeUrl)};
-   return _elm.Media.Site.YouTube.values = {_op: _op,id: id,site: site,matchers: matchers};
+   return _elm.Media.Site.YouTube.values = {_op: _op,id: id,site: site};
 };
 Elm.Media = Elm.Media || {};
 Elm.Media.Site = Elm.Media.Site || {};
@@ -10895,7 +10872,7 @@ Elm.Media.Site.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
+   $Media = Elm.Media.make(_elm),
    $Media$Site$Gfycat = Elm.Media.Site.Gfycat.make(_elm),
    $Media$Site$Imgur = Elm.Media.Site.Imgur.make(_elm),
    $Media$Site$Livecap = Elm.Media.Site.Livecap.make(_elm),
@@ -10924,7 +10901,6 @@ Elm.Main.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Media = Elm.Media.make(_elm),
-   $Media$Model = Elm.Media.Model.make(_elm),
    $Media$Site = Elm.Media.Site.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),

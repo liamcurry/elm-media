@@ -1,6 +1,6 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
+    "summary": "a small library for extracting social media references from text",
     "repository": "https://github.com/liamcurry/elm-media.git",
     "license": "BSD3",
     "source-directories": [

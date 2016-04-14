@@ -1,7 +1,6 @@
-module Media.Site.Gfycat (id, site, matchers) where
+module Media.Site.Gfycat (id, site) where
 
-import Media.Model exposing (..)
-import Regex exposing (Regex, regex)
+import Media exposing (Kind(..), Media, Url, SiteId, Site)
 
 
 id : SiteId
@@ -29,9 +28,9 @@ url media =
       Nothing
 
 
-matchers : List ( MediaKind, Regex )
+matchers : List ( Kind, String )
 matchers =
-  [ ( Image, regex "(?:gfycat.com\\/)(\\w+)" )
+  [ ( Image, "(?:gfycat.com\\/)(\\w+)" )
   ]
 
 

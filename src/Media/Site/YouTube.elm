@@ -1,7 +1,6 @@
-module Media.Site.YouTube (id, site, matchers) where
+module Media.Site.YouTube (id, site) where
 
-import Media.Model exposing (..)
-import Regex exposing (Regex, regex)
+import Media exposing (Kind(..), Media, Url, SiteId, Site)
 
 
 id : SiteId
@@ -39,9 +38,9 @@ iframeUrl media =
       Nothing
 
 
-matchers : List ( MediaKind, Regex )
+matchers : List ( Kind, String )
 matchers =
-  [ ( Video, regex "(?:youtu\\.be\\/|youtube(?:-nocookie)?\\.com\\S*[^\\w\\s-])([\\w-]{11})(?=[^\\w-]|$)(?![?=&+%\\w.-]*(?:['\"][^<>]*>|<\\/a>))[?=&+%\\w.-]*" )
+  [ ( Video, "(?:youtu\\.be\\/|youtube(?:-nocookie)?\\.com\\S*[^\\w\\s-])([\\w-]{11})(?=[^\\w-]|$)(?![?=&+%\\w.-]*(?:['\"][^<>]*>|<\\/a>))[?=&+%\\w.-]*" )
   ]
 
 

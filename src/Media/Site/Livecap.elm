@@ -1,7 +1,6 @@
-module Media.Site.Livecap (id, site, matchers) where
+module Media.Site.Livecap (id, site) where
 
-import Media.Model exposing (..)
-import Regex exposing (Regex, regex)
+import Media exposing (Kind(..), Media, Url, SiteId, Site)
 
 
 id : SiteId
@@ -29,9 +28,9 @@ iframeUrl media =
       Nothing
 
 
-matchers : List ( MediaKind, Regex )
+matchers : List ( Kind, String )
 matchers =
-  [ ( Video, regex "livecap.tv\\/t\\/([\\w_-]+\\/[\\w_-]+)" )
+  [ ( Video, "livecap.tv\\/t\\/([\\w_-]+\\/[\\w_-]+)" )
   ]
 
 

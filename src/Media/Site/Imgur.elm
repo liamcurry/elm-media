@@ -1,7 +1,6 @@
-module Media.Site.Imgur (id, site, matchers) where
+module Media.Site.Imgur (id, site) where
 
-import Media.Model exposing (..)
-import Regex exposing (Regex, regex)
+import Media exposing (Kind(..), Media, Url, SiteId, Site)
 
 
 id : SiteId
@@ -50,10 +49,10 @@ url media =
       Nothing
 
 
-matchers : List ( MediaKind, Regex )
+matchers : List ( Kind, String )
 matchers =
-  [ ( Image, regex "imgur.com/(?!gallery\\/|a\\/)(\\w+)" )
-  , ( Album, regex "imgur.com/(?:gallery\\/|a\\/)(\\w+)" )
+  [ ( Image, "imgur.com/(?!gallery\\/|a\\/)(\\w+)" )
+  , ( Album, "imgur.com/(?:gallery\\/|a\\/)(\\w+)" )
   ]
 
 

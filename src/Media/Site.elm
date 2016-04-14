@@ -1,6 +1,6 @@
 module Media.Site (image, video, all) where
 
-import Media.Model exposing (Site)
+import Media exposing (Site)
 import Media.Site.Gfycat as Gfycat
 import Media.Site.Imgur as Imgur
 import Media.Site.Livecap as Livecap
