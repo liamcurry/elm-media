@@ -1,12 +1,12 @@
 elm-media
 ---------
 
-[Demo](http://liamcurry.com/elm-media/) |
-[Docs](http://package.elm-lang.org/packages/liamcurry/elm-media/)
-
 `elm-media` is a small Elm library for extracting social media URLs from text.
 The typical use-case for this library is to embed videos and images from around
 the web into webpages.
+
+[Demo](http://liamcurry.com/elm-media/) |
+[Docs](http://package.elm-lang.org/packages/liamcurry/elm-media/)
 
 ## Example
 
@@ -36,3 +36,25 @@ results =
 - [Oddshot](https://oddshot.tv)
 - [Twitch](https://twitch.tv)
 - [YouTube](https://youtube.com)
+
+## Future sites
+
+- Reddit
+- Twitter
+- Gist
+- Instagram
+- Facebook
+- Google+
+- Vine
+- Steam
+
+## Development
+
+Want to add a new site? No problem! Just fork this repo and create a
+pull-request. Once you have a copy on your local machine:
+
+```shell
+cd elm-media
+npm install
+npm start
+```
