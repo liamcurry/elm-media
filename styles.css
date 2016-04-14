@@ -1,0 +1,123 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic|Source+Code+Pro);
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  color: #293c4b;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+}
+
+h2 {
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+textarea {
+  font-family: Ubuntu Mono, monospace;
+}
+
+a {
+  color: #1184CE;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+body > div:first-of-type {
+  display: flex;
+  flex: 1;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+header nav a {
+  margin-left: 20px;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.input-output {
+  display: flex;
+  flex: 1;
+}
+
+.input-output > div {
+  flex: 1;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+}
+
+.input textarea {
+  flex: 1;
+  font-size: 18px;
+  border-color: #eee;
+  border-style: solid;
+  border-width: 1px 1px 0 0;
+  padding: 20px;
+  outline: none;
+}
+
+.output {
+  display: flex;
+  flex-direction: column;
+}
+
+.media-list {
+  border-top: 1px solid #eee;
+  flex: 1;
+  overflow: auto;
+}
+
+.media {
+  border-bottom: 1px solid #eee;
+}
+
+.media ul {
+  background: #eee;
+}
+
+.media li {
+  display: inline-block;
+  font-size: 12px;
+  list-style: none;
+  padding: 0 20px;
+  line-height: 30px;
+  border-left: 1px solid #fff;
+}
+.media li:first-of-type {
+  border-left: 0;
+}
+
+.media-embed {
+  padding: 20px;
+}
+.media-embed a {
+  display: block;
+}
