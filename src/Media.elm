@@ -1,7 +1,11 @@
 module Media (Kind(..), Id, Media, Url, SiteId, Site, Urls, toUrls, find, urls) where
 
-{-| A library for finding and embedding social media links.
+{-| This package is for extracting social media from text.
 
+# Types
+@docs Kind, Id, Media, SiteId, Site, Url, Urls
+
+# Extracting media
 @docs find, urls
 
 -}
@@ -9,6 +13,8 @@ module Media (Kind(..), Id, Media, Url, SiteId, Site, Urls, toUrls, find, urls) 
 import Regex exposing (Regex, Match, regex)
 
 
+{-| Represent the type of media
+-}
 type Kind
   = Post
   | Reply
@@ -19,10 +25,14 @@ type Kind
   | Listing
 
 
+{-| Identifier for media
+-}
 type alias Id =
   String
 
 
+{-| Reference to social media
+-}
 type alias Media =
   { id : Id
   , kind : Kind

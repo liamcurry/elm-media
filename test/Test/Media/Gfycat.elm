@@ -1,8 +1,8 @@
-module Test.Embed.Gfycat (tests) where
+module Test.Media.Gfycat (tests) where
 
 import ElmTest exposing (..)
-import Embed exposing (MediaRef, Kind(..))
-import Embed.Gfycat as Gfycat
+import Media exposing (Media, Kind(..), Site)
+import Media.Site.Gfycat as Gfycat
 
 
 sampleText : String
@@ -14,18 +14,19 @@ sampleText =
   """
 
 
-results : List MediaRef
+results : List ( Site, Media )
 results =
-  Embed.find sampleText Gfycat.siteId Gfycat.matchers
+  Media.find [ Gfycat.site ] sampleText
 
 
-expected : List MediaRef
+expected : List ( Site, Media )
 expected =
-  [ { siteId = Gfycat.siteId
+  [ { siteId = Gfycat.id
     , kind = Image
-    , mediaId = "UnsungAncientBigmouthbass"
+    , id = "UnsungAncientBigmouthbass"
     }
   ]
+    |> List.map (\m -> ( Gfycat.site, m ))
 
 
 tests : Test

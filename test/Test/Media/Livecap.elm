@@ -1,8 +1,8 @@
 module Test.Media.Livecap (tests) where
 
 import ElmTest exposing (..)
-import Media exposing (MediaRef, Kind(..))
-import Media.Livecap as Livecap
+import Media exposing (Media, Kind(..), Site)
+import Media.Site.Livecap as Livecap
 
 
 sampleText : String
@@ -15,26 +15,27 @@ sampleText =
   """
 
 
-results : List MediaRef
+results : List ( Site, Media )
 results =
-  Media.find sampleText Livecap.siteId Livecap.matchers
+  Media.find [ Livecap.site ] sampleText
 
 
-expected : List MediaRef
+expected : List ( Site, Media )
 expected =
-  [ { siteId = Livecap.siteId
+  [ { siteId = Livecap.id
     , kind = Video
-    , mediaId = "riotgames/uuOKs01Vsee"
+    , id = "riotgames/uuOKs01Vsee"
     }
-  , { siteId = Livecap.siteId
+  , { siteId = Livecap.id
     , kind = Video
-    , mediaId = "domingo/ufdc9LXoezd"
+    , id = "domingo/ufdc9LXoezd"
     }
-  , { siteId = Livecap.siteId
+  , { siteId = Livecap.id
     , kind = Video
-    , mediaId = "parmaviolet/uLKRSQoAaEQ"
+    , id = "parmaviolet/uLKRSQoAaEQ"
     }
   ]
+    |> List.map (\m -> ( Livecap.site, m ))
 
 
 tests : Test

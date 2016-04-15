@@ -48,6 +48,12 @@ results =
 - Vine
 - Steam
 
+## TODO
+
+- Linking to videos at specific times
+- Supporting embeds that require script tags
+- oEmbed URLs
+
 ## Development
 
 Want to add a new site? No problem! Just fork this repo and create a

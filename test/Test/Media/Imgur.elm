@@ -1,8 +1,8 @@
-module Test.Embed.Imgur (tests) where
+module Test.Media.Imgur (tests) where
 
 import ElmTest exposing (..)
-import Embed exposing (MediaRef, Kind(..), Url)
-import Embed.Imgur as Imgur exposing (site)
+import Media exposing (Media, Kind(..), Url, Site)
+import Media.Site.Imgur as Imgur exposing (site)
 
 
 sampleText : String
@@ -15,40 +15,41 @@ sampleText =
   """
 
 
-results : List MediaRef
+results : List ( Site, Media )
 results =
-  Embed.find sampleText Imgur.siteId Imgur.matchers
+  Media.find [ Imgur.site ] sampleText
 
 
-expected : List MediaRef
+expected : List ( Site, Media )
 expected =
-  [ { siteId = Imgur.siteId
+  [ { siteId = Imgur.id
     , kind = Image
-    , mediaId = "aU9H6vF"
+    , id = "aU9H6vF"
     }
-  , { siteId = Imgur.siteId
+  , { siteId = Imgur.id
     , kind = Image
-    , mediaId = "EU9H6vF"
+    , id = "EU9H6vF"
     }
-  , { siteId = Imgur.siteId
+  , { siteId = Imgur.id
     , kind = Album
-    , mediaId = "nrBo2"
+    , id = "nrBo2"
     }
-  , { siteId = Imgur.siteId
+  , { siteId = Imgur.id
     , kind = Album
-    , mediaId = "nrBo1"
+    , id = "nrBo1"
     }
   ]
+    |> List.map (\m -> ( Imgur.site, m ))
 
 
-urlTestCases : List ( MediaRef, Maybe (MediaRef -> Maybe Url), Maybe Url )
+urlTestCases : List ( Media, Maybe (Media -> Maybe Url), Maybe Url )
 urlTestCases =
   let
-    ref : MediaRef
+    ref : Media
     ref =
       { siteId = site.id
       , kind = Image
-      , mediaId = "test"
+      , id = "test"
       }
   in
     [ ( ref
@@ -78,7 +79,7 @@ urlTestCases =
     ]
 
 
-generateUrlTest : ( MediaRef, Maybe (MediaRef -> Maybe Url), Maybe Url ) -> Test
+generateUrlTest : ( Media, Maybe (Media -> Maybe Url), Maybe Url ) -> Test
 generateUrlTest ( ref, maybeFn, expected ) =
   let
     result =

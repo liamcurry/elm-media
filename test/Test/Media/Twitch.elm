@@ -1,58 +1,45 @@
 module Test.Media.Twitch (tests) where
 
 import ElmTest exposing (..)
-import Media exposing (MediaRef, Kind(..), Url)
-import Media.Twitch as Twitch exposing (site)
+import Media exposing (Media, Kind(..), Url, Site)
+import Media.Site.Twitch as Twitch exposing (site)
 
 
 sampleText : String
 sampleText =
   """
   twitch.tv/dirtybomb
-  https://www.livecap.tv/t/parmaviolet/uLKRSQoAaEQ
-  http://oddshot.tv/shot/counterpit-2016031710238933
   https://www.twitch.tv/lightningzor/v/24318352
   """
 
 
-results : List MediaRef
+results : List ( Site, Media )
 results =
-  Media.find sampleText Twitch.siteId Twitch.matchers
+  Media.find [ Twitch.site ] sampleText
 
 
-expected : List MediaRef
+expected : List ( Site, Media )
 expected =
-  [ { siteId = Twitch.siteId
+  [ { siteId = Twitch.id
     , kind = Stream
-    , mediaId = "lightningzor"
+    , id = "dirtybomb"
     }
-  , { siteId = Twitch.siteId
+  , { siteId = Twitch.id
     , kind = Stream
-    , mediaId = "dirtybomb"
-    }
-  , { siteId = Twitch.siteId
-    , kind = Stream
-    , mediaId = "parmaviolet"
-    }
-  , { siteId = Twitch.siteId
-    , kind = Stream
-    , mediaId = "counterpit"
-    }
-  , { siteId = Twitch.siteId
-    , kind = Video
-    , mediaId = "24318352"
+    , id = "lightningzor"
     }
   ]
+    |> List.map (\m -> ( Twitch.site, m ))
 
 
-urlTestCases : List ( MediaRef, Maybe (MediaRef -> Maybe Url), Maybe Url )
+urlTestCases : List ( Media, Maybe (Media -> Maybe Url), Maybe Url )
 urlTestCases =
   let
-    ref : MediaRef
+    ref : Media
     ref =
       { siteId = site.id
       , kind = Stream
-      , mediaId = "test"
+      , id = "test"
       }
   in
     [ ( ref
@@ -66,10 +53,6 @@ urlTestCases =
     , ( ref
       , site.imgLgUrl
       , Just "https://static-cdn.jtvnw.net/previews-ttv/live_user_test_-640x360.jpg"
-      )
-    , ( { ref | siteId = "testing" }
-      , site.imgSmUrl
-      , Nothing
       )
     , ( { ref | kind = Video }
       , site.imgSmUrl
@@ -86,7 +69,7 @@ urlTestCases =
     ]
 
 
-generateUrlTest : ( MediaRef, Maybe (MediaRef -> Maybe Url), Maybe Url ) -> Test
+generateUrlTest : ( Media, Maybe (Media -> Maybe Url), Maybe Url ) -> Test
 generateUrlTest ( ref, maybeFn, expected ) =
   let
     result =

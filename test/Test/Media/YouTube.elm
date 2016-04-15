@@ -1,8 +1,8 @@
 module Test.Media.YouTube (..) where
 
 import ElmTest exposing (..)
-import Media exposing (MediaRef, Kind(..))
-import Media.YouTube as YouTube
+import Media exposing (Media, Kind(..), Site)
+import Media.Site.YouTube as YouTube
 
 
 sampleText : String
@@ -18,42 +18,43 @@ sampleText =
   """
 
 
-results : List MediaRef
+results : List ( Site, Media )
 results =
-  Media.find sampleText YouTube.siteId YouTube.matchers
+  Media.find [ YouTube.site ] sampleText
 
 
-expected : List MediaRef
+expected : List ( Site, Media )
 expected =
-  [ { siteId = YouTube.siteId
+  [ { siteId = YouTube.id
     , kind = Video
-    , mediaId = "t-ZRX8984sc"
+    , id = "t-ZRX8984sc"
     }
-  , { siteId = YouTube.siteId
+  , { siteId = YouTube.id
     , kind = Video
-    , mediaId = "t-ZRX8984sc"
+    , id = "t-ZRX8984sc"
     }
-  , { siteId = YouTube.siteId
+  , { siteId = YouTube.id
     , kind = Video
-    , mediaId = "r5nB9u4jjy4"
+    , id = "r5nB9u4jjy4"
     }
-  , { siteId = YouTube.siteId
+  , { siteId = YouTube.id
     , kind = Video
-    , mediaId = "n17B_uFF4cA"
+    , id = "n17B_uFF4cA"
     }
-  , { siteId = YouTube.siteId
+  , { siteId = YouTube.id
     , kind = Video
-    , mediaId = "iwGFalTRHDA"
+    , id = "iwGFalTRHDA"
     }
-  , { siteId = YouTube.siteId
+  , { siteId = YouTube.id
     , kind = Video
-    , mediaId = "iwGFalTRHDA"
+    , id = "iwGFalTRHDA"
     }
-  , { siteId = YouTube.siteId
+  , { siteId = YouTube.id
     , kind = Video
-    , mediaId = "iwGFalTRHDA"
+    , id = "iwGFalTRHDA"
     }
   ]
+    |> List.map (\m -> ( YouTube.site, m ))
 
 
 tests : Test
