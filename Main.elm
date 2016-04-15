@@ -168,13 +168,22 @@ view address model =
                     []
                     [ media.kind |> kindToString |> text ]
                 ]
+            , li
+                []
+                [ strong
+                    []
+                    [ text "URL: " ]
+                , span
+                    []
+                    [ a
+                        [ urls.url |> Maybe.withDefault "" |> href ]
+                        [ urls.url |> Maybe.withDefault "" |> text ]
+                    ]
+                ]
             ]
         , div
             [ class "media-embed" ]
             [ html
-            , a
-                [ urls.url |> Maybe.withDefault "" |> href ]
-                [ urls.url |> Maybe.withDefault "" |> text ]
             ]
         ]
 
@@ -194,24 +203,42 @@ view address model =
         ]
   in
     div
-      [ class "container" ]
+      [ class "wrapper" ]
       [ header
           []
-          [ h1 [] [ text "elm-media" ]
-          , nav
-              []
-              [ a
-                  [ href "http://package.elm-lang.org/packages/liamcurry/elm-media/" ]
-                  [ text "Documentation" ]
-              , a
-                  [ href "https://github.com/liamcurry/elm-media" ]
-                  [ text "Github" ]
+          [ div
+              [ class "container" ]
+              [ div
+                  [ class "brand" ]
+                  [ img
+                      [ src "logo.svg"
+                      , width 24
+                      ]
+                      []
+                  , h1 [] [ text "elm-media" ]
+                  , p [] [ text "extract and build social media urls" ]
+                  ]
+              , nav
+                  []
+                  [ a
+                      [ href "http://package.elm-lang.org/packages/liamcurry/elm-media/" ]
+                      [ text "Documentation" ]
+                  , a
+                      [ href "https://github.com/liamcurry/elm-media" ]
+                      [ strong
+                          []
+                          [ text "Github" ]
+                      ]
+                  ]
               ]
           ]
       , div
           [ class "input-output" ]
-          [ input
-          , output
+          [ div
+              [ class "container" ]
+              [ input
+              , output
+              ]
           ]
       ]
 

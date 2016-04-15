@@ -10957,13 +10957,16 @@ Elm.Main.make = function (_elm) {
                          ,A2($Html.li,
                          _U.list([]),
                          _U.list([A2($Html.strong,_U.list([]),_U.list([$Html.text("Kind: ")]))
-                                 ,A2($Html.span,_U.list([]),_U.list([$Html.text(kindToString(_p7.kind))]))]))]))
-                 ,A2($Html.div,
-                 _U.list([$Html$Attributes.$class("media-embed")]),
-                 _U.list([_p6._3
-                         ,A2($Html.a,
-                         _U.list([$Html$Attributes.href(A2($Maybe.withDefault,"",_p8.url))]),
-                         _U.list([$Html.text(A2($Maybe.withDefault,"",_p8.url))]))]))]));
+                                 ,A2($Html.span,_U.list([]),_U.list([$Html.text(kindToString(_p7.kind))]))]))
+                         ,A2($Html.li,
+                         _U.list([]),
+                         _U.list([A2($Html.strong,_U.list([]),_U.list([$Html.text("URL: ")]))
+                                 ,A2($Html.span,
+                                 _U.list([]),
+                                 _U.list([A2($Html.a,
+                                 _U.list([$Html$Attributes.href(A2($Maybe.withDefault,"",_p8.url))]),
+                                 _U.list([$Html.text(A2($Maybe.withDefault,"",_p8.url))]))]))]))]))
+                 ,A2($Html.div,_U.list([$Html$Attributes.$class("media-embed")]),_U.list([_p6._3]))]));
       };
       var media = A2($List.map,mediaView,html($Media.urls(A2($Media.find,$Media$Site.all,model))));
       var output = A2($Html.div,_U.list([$Html$Attributes.$class("output")]),_U.list([A2($Html.div,_U.list([$Html$Attributes.$class("media-list")]),media)]));
@@ -10974,17 +10977,27 @@ Elm.Main.make = function (_elm) {
               ,$Html$Attributes.autofocus(true)]),
       _U.list([$Html.text(model)]))]));
       return A2($Html.div,
-      _U.list([$Html$Attributes.$class("container")]),
+      _U.list([$Html$Attributes.$class("wrapper")]),
       _U.list([A2($Html.header,
               _U.list([]),
-              _U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text("elm-media")]))
+              _U.list([A2($Html.div,
+              _U.list([$Html$Attributes.$class("container")]),
+              _U.list([A2($Html.div,
+                      _U.list([$Html$Attributes.$class("brand")]),
+                      _U.list([A2($Html.img,_U.list([$Html$Attributes.src("logo.svg"),$Html$Attributes.width(24)]),_U.list([]))
+                              ,A2($Html.h1,_U.list([]),_U.list([$Html.text("elm-media")]))
+                              ,A2($Html.p,_U.list([]),_U.list([$Html.text("extract and build social media urls")]))]))
                       ,A2($Html.nav,
                       _U.list([]),
                       _U.list([A2($Html.a,
                               _U.list([$Html$Attributes.href("http://package.elm-lang.org/packages/liamcurry/elm-media/")]),
                               _U.list([$Html.text("Documentation")]))
-                              ,A2($Html.a,_U.list([$Html$Attributes.href("https://github.com/liamcurry/elm-media")]),_U.list([$Html.text("Github")]))]))]))
-              ,A2($Html.div,_U.list([$Html$Attributes.$class("input-output")]),_U.list([input,output]))]));
+                              ,A2($Html.a,
+                              _U.list([$Html$Attributes.href("https://github.com/liamcurry/elm-media")]),
+                              _U.list([A2($Html.strong,_U.list([]),_U.list([$Html.text("Github")]))]))]))]))]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("input-output")]),
+              _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("container")]),_U.list([input,output]))]))]));
    });
    var NoOp = {ctor: "NoOp"};
    var emptyModel = "elm-media is a small Elm library for extracting social media URLs from text.\n\nSome examples:\n\nImgur:\n\n  https://imgur.com/cjCGCNH\n\nYouTube:\n\n  https://youtu.be/oYk8CKH7OhE\n  https://www.youtube.com/watch?v=DfLvDFxcAIA\n\nOther supported sites:\n\n  Gfycat, Twitch, Livecap, Oddshot (more coming soon)\n\nPull-requests welcome!\n";
