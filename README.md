@@ -1,5 +1,4 @@
-elm-media
----------
+# elm-media [![Build Status](https://travis-ci.org/liamcurry/elm-media.svg?branch=master)](https://travis-ci.org/liamcurry/elm-media)
 
 `elm-media` is a small Elm library for extracting social media URLs from text.
 The typical use-case for this library is to embed videos and images from around
