@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cd test && elm-test Test.elm",
+    "docs": "elm-make --docs docs.json",
     "build-example": "cd example && elm-make --yes --warn Main.elm --output main.js",
     "build": "npm test && npm run build-example",
     "watch-example": "nodemon -e elm -w example -w src --exec 'npm run build-example'",

@@ -1,6 +1,24 @@
-module Media (Kind(..), Id, Media, Url, SiteId, Site, Urls, toUrls, find, urls) where
+module Media (Kind(..), Id, Media, SiteId, Site, Url, Urls, find, urls) where
 
-{-| This package is for extracting social media from text.
+{-| This package is for extracting social media references from text. The
+most common use-case for this package is to embed social media widgets on
+a webpage from user input.
+
+Basic example:
+
+    import Media
+    import Media.Site as Site
+
+    text = """https://imgur.com/cjCGCNH
+    https://youtu.be/oYk8CKH7OhE
+    https://www.youtube.com/watch?v=DfLvDFxcAIA
+    """
+
+    -- Find all the media references in some text
+    media = Media.find Site.all text
+
+    -- Generate URLs for media objects
+    urls = Media.urls media
 
 # Types
 @docs Kind, Id, Media, SiteId, Site, Url, Urls
@@ -13,7 +31,7 @@ module Media (Kind(..), Id, Media, Url, SiteId, Site, Urls, toUrls, find, urls) 
 import Regex exposing (Regex, Match, regex)
 
 
-{-| Represent the type of media
+{-| Represents the general type of media.
 -}
 type Kind
   = Post
@@ -25,13 +43,13 @@ type Kind
   | Listing
 
 
-{-| Identifier for media
+{-| Unique site-specific identifier for media.
 -}
 type alias Id =
   String
 
 
-{-| Reference to social media
+{-| A slim reference to media on a site.
 -}
 type alias Media =
   { id : Id
@@ -40,14 +58,20 @@ type alias Media =
   }
 
 
+{-| A basic representation of a URL.
+-}
 type alias Url =
   String
 
 
+{-| Unique identifier for a site.
+-}
 type alias SiteId =
   String
 
 
+{-| Represents a site.
+-}
 type alias Site =
   { id : SiteId
   , name : String
@@ -60,6 +84,8 @@ type alias Site =
   }
 
 
+{-| Represents all possible URLs for a given media object and site.
+-}
 type alias Urls =
   { media : Media
   , url : Maybe Url
@@ -70,6 +96,8 @@ type alias Urls =
   }
 
 
+{-| Generates URLs for a media object based on a site.
+-}
 toUrls : Site -> Media -> Urls
 toUrls site media =
   let

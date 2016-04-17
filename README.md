@@ -41,11 +41,13 @@ results =
 
 - Reddit
 - Twitter
+- Github
 - Gist
 - Instagram
 - Facebook
 - Google+
 - Vine
+- Vimeo
 - Steam
 
 ## TODO
