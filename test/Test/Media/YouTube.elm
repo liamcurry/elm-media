@@ -59,7 +59,17 @@ expected =
 
 tests : Test
 tests =
-  suite
-    "YouTube"
-    [ test "results are as expected" (assertEqual expected results)
-    ]
+  let
+    sortByMediaId ( _, media ) =
+      media.id
+
+    expectedSorted =
+      List.sortBy sortByMediaId expected
+
+    resultsSorted =
+      List.sortBy sortByMediaId results
+  in
+    suite
+      "YouTube"
+      [ test "results are as expected" (assertEqual expectedSorted resultsSorted)
+      ]

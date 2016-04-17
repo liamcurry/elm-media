@@ -24,19 +24,19 @@ expected : List ( Site, Media )
 expected =
   [ { siteId = Imgur.id
     , kind = Image
-    , id = "aU9H6vF"
-    }
-  , { siteId = Imgur.id
-    , kind = Image
     , id = "EU9H6vF"
     }
   , { siteId = Imgur.id
-    , kind = Album
-    , id = "nrBo2"
+    , kind = Image
+    , id = "aU9H6vF"
     }
   , { siteId = Imgur.id
     , kind = Album
     , id = "nrBo1"
+    }
+  , { siteId = Imgur.id
+    , kind = Album
+    , id = "nrBo2"
     }
   ]
     |> List.map (\m -> ( Imgur.site, m ))
@@ -63,10 +63,6 @@ urlTestCases =
     , ( ref
       , site.imgLgUrl
       , Just "https://i.imgur.com/testl.jpg"
-      )
-    , ( { ref | siteId = "testing" }
-      , site.imgSmUrl
-      , Nothing
       )
     , ( { ref | kind = Album }
       , site.imgSmUrl

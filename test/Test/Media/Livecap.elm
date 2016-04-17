@@ -24,7 +24,7 @@ expected : List ( Site, Media )
 expected =
   [ { siteId = Livecap.id
     , kind = Video
-    , id = "riotgames/uuOKs01Vsee"
+    , id = "parmaviolet/uLKRSQoAaEQ"
     }
   , { siteId = Livecap.id
     , kind = Video
@@ -32,7 +32,7 @@ expected =
     }
   , { siteId = Livecap.id
     , kind = Video
-    , id = "parmaviolet/uLKRSQoAaEQ"
+    , id = "riotgames/uuOKs01Vsee"
     }
   ]
     |> List.map (\m -> ( Livecap.site, m ))

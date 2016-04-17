@@ -28,6 +28,10 @@ expected =
     , kind = Stream
     , id = "lightningzor"
     }
+  , { siteId = Twitch.id
+    , kind = Video
+    , id = "24318352"
+    }
   ]
     |> List.map (\m -> ( Twitch.site, m ))
 
